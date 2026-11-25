@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; padding: 14px; background: #f8fafc; color: #1e293b; }
+    label { display: block; font-size: 12px; font-weight: 600; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+    button { width: 100%; margin-top: 16px; padding: 10px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    #status { margin-top: 10px; font-size: 13px; color: #16a34a; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <form id="crmForm" onsubmit="handleSubmit(event)">
+    <label>Client / Lead Name *</label>
+    <input type="text" id="fullName" required placeholder="e.g. Sarah Jenkins">
+
+    <label>Company Name</label>
+    <input type="text" id="company" placeholder="e.g. Acme Growth Studio">
+
+    <label>Email Address *</label>
+    <input type="email" id="email" required placeholder="sarah@acmegrowth.com">
+
+    <label>Phone Number *</label>
+    <input type="text" id="phone" required placeholder="01700000000">
+
+    <label>Service Category</label>
+    <select id="serviceCategory">
+      <option>AI Workflow Automation</option>
+      <option>B2B Lead Research</option>
+      <option>AI Bookkeeping & Back-Office</option>
+      <option>SOP & Process Documentation</option>
+    </select>
+
+    <label>Invoice / Deal Value ($)</label>
+    <input type="number" id="amount" step="0.01" placeholder="250.00">
+
+    <button type="submit">Save to Google Sheet</button>
+    <div id="status"></div>
+  </form>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const data = {
+        fullName: document.getElementById('fullName').value,
+        company: document.getElementById('company').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        serviceCategory: document.getElementById('serviceCategory').value,
+        amount: document.getElementById('amount').value
+      };
+      google.script.run.withSuccessHandler(function(res) {
+        document.getElementById('status').innerText = res.message;
+        document.getElementById('crmForm').reset();
+      }).saveRecord(data);
+    }
+  </script>
+</body>
+</html>
